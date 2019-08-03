@@ -11,10 +11,7 @@ class Admin {
    */
   async handle({ request }, next) {
     // call next to advance the request
-    if (!request.user.isAdmin) {
-      response.status(403).json({ Alert: 'YOU ARE TOTALLY NOT AUTHORIZED TO BE HERE!!' })
-    }
-    next();
+    if (!(await auth.getUser()).isAdmin) return response.status(403).send('Access denied')
     await next()
   }
 }

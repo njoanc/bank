@@ -34,7 +34,9 @@
     "uuid": "^3.3.2",
     "winston": "^3.2.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "adonis-vow-mocha": "^2.3.0"
+  },
   "autoload": {
     "App": "./app"
   }

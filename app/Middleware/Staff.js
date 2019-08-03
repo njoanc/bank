@@ -11,10 +11,10 @@ class Staff {
    */
   async handle({ request }, next) {
     // call next to advance the request
-    if (request.user.type !== 'Staff') {
-      res.status(403).json({ Alert: 'YOU ARE NOT AUTHORIZED !!' })
-    }
+    if (!(await auth.getUser()).isStaff) return response.status(403).send('Access denied')
     await next()
+
+
   }
 }
 
