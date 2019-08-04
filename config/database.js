@@ -9,7 +9,7 @@
 const Env = use('Env')
 
 const Url = require('url-parse')
-const DATABASE_URL = new Url(Env.get('DATABASE_URL'))
+const DATABASE_URL = new Url(process.Env.get('DATABASE_URL'))
 
 /** @type {import('@adonisjs/ignitor/src/Helpers')} */
 const Helpers = use('Helpers')
