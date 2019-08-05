@@ -5,6 +5,27 @@ const User = use('App/Models/User')
 
 class StaffController {
 
+    async signup({ request, response }) {
+        const staff = request.only(['name', 'email', 'password', "DOB"])
+        const users = await User.findBy('email', staff.email)
+        if (users) return response.status(400).send({ message: { error: 'User already registered' } })
+        const user = await User.create({
+            name: staff.name,
+            email: staff.email,
+            password: staff.password,
+            DOB: staff.DOB,
+            type: 'Staff',
+        });
+        await user.save()
+        return response.json(user)
+    }
+    async login({ request, response, auth }) {
+        const { email, password } = request.all()
+        let token = await auth.attempt(email, password)
+        let user = await User.query().where('email', email).fetch()
+        return { token } // your structured object
+    }
+
     async index({ request, params, response }) {
         let user = await User.findBy('id', params.id);
         if (!user) return response.status(404).json({ message: 'No users available' });

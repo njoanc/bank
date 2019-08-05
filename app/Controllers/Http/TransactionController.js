@@ -1,4 +1,5 @@
 'use strict'
+const { validate } = use('Validator');
 const Transaction = use('App/Models/Transaction');
 const Account = use('App/Models/Account');
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -19,18 +20,8 @@ class TransactionController {
    * @param {View} ctx.view
    */
   async index({ request, params, response }) {
-    const account = await Account.findBy("id", params.id)
-    if (!account) response.status(400).send('the id of this account does not exist')
-
-    const trans = request.only(['type', 'accountNumber', 'accountName', 'amount'])
-    const transaction = new Transaction()
-
-    transaction.type = trans.type
-    transaction.accountNumber = trans.accountNumber
-    transaction.amount = trans.amount
-    transaction.accountName = trans.accountName
-
-    await transaction.save()
+    const transaction = await Transaction.findBy('id', params.id)
+    if (!transaction) return response.status(400).send('you are not allowed to this transaction')
     return response.json(transaction)
 
   }
@@ -45,20 +36,33 @@ class TransactionController {
    * @param {View} ctx.view
    */
   async transaction({ request, params, response }) {
-    const account = await Account.findBy('id', params.id);
-    if (!account) response.status(400).send('the id of this account does not exist')
 
-    const trans = request.only(['type', 'accountNumber', 'accountName', 'amount', 'transactionDate'])
-    if (account.accountNumber !== trans.accountNumber) return response.status(400).send('the account do not exist')
+
+    const validators = {
+      accountNUmber: 'required',
+      amount: 'required',
+      accountName: 'required',
+      transactionDate: 'required',
+      type: 'required|in:withdraw,deposit',
+    }
+    const validation = await validate(request.all(), validators);
+
+    if (validation.fails()) return response.json(validation)
+
+    const account = await Account.findBy('id', params.id)
+    if (!account) return response.status(400).send('the id of account does not exist')
+    let trans = request.only(['type', 'accountNumber', 'amount', 'accountName', 'transactionDate'])
+    if (account.accountNumber !== trans.accountNumber) return response.status(400).send('the account  does not exist')
+    if (account.accountName !== trans.accountName) return response.status(400).send('the account name is incorrect')
     const transaction = new Transaction()
-    transaction.type = trans.type
+    transaction.typee = trans.type
     transaction.accountNumber = trans.accountNumber
     transaction.amount = trans.amount
     transaction.accountName = trans.accountName
     transaction.transactionDate = trans.transactionDate
-
     await transaction.save()
     return response.json(transaction)
+
   }
 
   /**
@@ -97,7 +101,7 @@ class TransactionController {
     if (!account) response.status(400).send('the id of this account does not exist')
     const transaction = await Transaction.all()
     // console.log(transaction)
-    return response.send(transaction)
+    return response.json(transaction)
 
   }
 

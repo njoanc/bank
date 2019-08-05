@@ -36,7 +36,8 @@ const providers = [
 */
 const aceProviders = [
   '@adonisjs/lucid/providers/MigrationsProvider',
-  'adonis-vow-mocha/providers/VowMochaProvider'
+  'adonis-vow-mocha/providers/VowMochaProvider',
+  '@adonisjs/vow/providers/VowProvider'
 ]
 
 /*
