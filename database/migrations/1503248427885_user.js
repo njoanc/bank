@@ -12,7 +12,7 @@ class UserSchema extends Schema {
       table.increments()
       table.enu('type', ['Staff', 'Client'])
       table.string('name', 80).notNullable()
-      table.string('email', 254).notNullable().unique()
+      table.string('email', 254).notNullable()
       table.string('password', 60).notNullable()
       // table.string('token')
       table.date('DOB').notNullable()

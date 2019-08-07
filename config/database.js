@@ -57,7 +57,7 @@ module.exports = {
       user: Env.get('DB_USER', 'root'),
       password: Env.get('DB_PASSWORD', ''),
       database: Env.get('DB_DATABASE', 'adonis'),
-      socketPath: '/Applications/XAMPP/tmp/mysql/mysql.sock'
+
     },
     debug: Env.get('DB_DEBUG', false)
   },
