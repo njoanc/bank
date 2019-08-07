@@ -76,12 +76,12 @@ class TransactionController {
   async byDate({ request, params, response }) {
     //view specific transaction by date
     const account = await Account.findBy('id', params.id)
-    if (!account) response.status(400).send('the id of this account does not exist')
+    if (!account) response.status(404).send('the id of this account does not exist')
     const dater = "CREATE TABLE trial(start DATE)"
     // dater = request.only(['start'])
 
     let transaction = await Transaction.query().today().fetch();
-    if (!dater.start == transaction.transactionDate) return response.status(400).send('you did not make any transaction on this date.')
+    if (!dater.start == transaction.transactionDate) return response.status(404).send('you did not make any transaction on this date.')
 
     return response.json(transaction)
 
@@ -98,7 +98,7 @@ class TransactionController {
    */
   async showAll({ request, params, response }) {
     const account = await Account.findBy('id', params.id);
-    if (!account) response.status(400).send('the id of this account does not exist')
+    if (!account) response.status(404).send('the id of this account does not exist')
     const transaction = await Transaction.all()
     // console.log(transaction)
     return response.json(transaction)

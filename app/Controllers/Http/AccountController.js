@@ -23,10 +23,10 @@ class AccountController {
   async create({ request, params, response }) {
     const randomNumber = Math.floor(Math.random() * 20) + 190274675327268765
     const user = await User.findBy('id', params.id)
-    if (!user.id == Number(params.id)) response.status(400).send('incorrect user id')
+    if (!user.id == Number(params.id)) response.status(401).send('incorrect user id')
     const accounts = request.only('identity')
     const acc = await Account.findBy('identity', accounts.identity)
-    if (acc) return response.status(400).send({ message: { error: 'account is already created.' } })
+    if (acc) return response.status(401).send({ message: { error: 'account is already created.' } })
 
     const account = new Account()
     account.accountName = user.name
